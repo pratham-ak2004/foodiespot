@@ -5,7 +5,6 @@ import { HeroHighlight } from "@/components/hero-highlight";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
 
 import { Label } from "@/components/ui/label";
-import HomeSVG from "@/components/custom-components/hero-home-svg";
 
 export default function Home() {
   return (
