@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import NavBar from "@/components/custom-components/navBar";
 
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <GoogleAnalytics gaId={process.env.NEXT_GOOGLE_ANALYTICS_ID || ""} />
         <SpeedInsights />
         <ThemeProvider
           attribute="class"
