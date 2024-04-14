@@ -2,6 +2,9 @@
 
 import { useTheme } from "next-themes";
 import React from "react";
+import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,33 +21,84 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { FloatingNav } from "@/components/floating-navbar";
+import { navItems } from "@/lib/data";
 
 export default function NavBar() {
   return (
     <>
-      <div className="w-full h-20 flex justify-center px-6">
-        <div className="w-full max-w-7xl font-normal text-xl flex items-center justify-center">
-          <Label className="font-normal text-4xl">FoodieSpot</Label>
-          <ul className="flex-row gap-x-5 ml-8 w-full hidden md:flex">
-            <li>Home</li>
-            <li>Category</li>
-            <li>Search</li>
-            <li>About us</li>
-          </ul>
-          <div
-            className="gap-x-4 md:flex flex-row items-center hidden
+      <SessionProvider>
+        <FloatingNav navItems={navItems} />
+        <a id="top-home"></a>
+        <div className="w-full h-20 flex justify-center px-6">
+          <div className="w-full max-w-7xl font-normal text-xl flex items-center justify-center">
+            <Label className="font-normal text-4xl">FoodieSpot</Label>
+            <ul className="flex-row gap-x-5 ml-8 w-full hidden md:flex">
+              {navItems.map((item, index) => (
+                <>
+                  <Link href={item.link}>{item.name}</Link>
+                </>
+              ))}
+            </ul>
+            <div
+              className="gap-x-4 md:flex flex-row items-center hidden
             "
-          >
-            <Button variant="outline" size="icon" className="border-0">
-              <Github />
-            </Button>
-            <SwitchTheme />
+            >
+              <Button variant="outline" size="icon" className="border-0">
+                <Github />
+              </Button>
+              <SwitchTheme />
+              <UserAvatar />
+            </div>
           </div>
+          <Drawer />
         </div>
-        <Drawer />
-      </div>
+      </SessionProvider>
     </>
   );
+}
+
+function UserAvatar() {
+  const { data } = useSession();
+
+  React.useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  if (data === null) {
+    return (
+      <>
+        <Button onClick={() => signIn()}>SignIn</Button>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar>
+              <AvatarImage src={`${data ? data.user.image : ""}`} />
+              <AvatarFallback>
+                <Image
+                  src="/profile-loading.svg"
+                  width={100}
+                  height={100}
+                  alt="Profile loading"
+                ></Image>
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => signOut()}>
+              <Button className="w-full">LogOut</Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </>
+    );
+  }
 }
 
 export function SwitchTheme() {
