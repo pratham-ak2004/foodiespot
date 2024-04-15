@@ -1,7 +1,10 @@
 "use client";
 import "@/app/styles.module.css";
 import Image from "next/image";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
+import { restaurants } from "@/lib/data";
+import { useRouter } from "next/navigation";
 
 import ScrollToTop from "@/components/custom-components/scrollToTop";
 import { HeroHighlight } from "@/components/hero-highlight";
@@ -9,6 +12,8 @@ import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { BackgroundGradient } from "@/components/background-gradient";
 
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   return (
@@ -46,26 +51,62 @@ function HeroSection() {
 }
 
 function SearchRestaurant() {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    console.log(isOpen);
+  }, [isOpen]);
+
+  const handleCategoryClick = (link: string) => {
+    router.push(link);
+  };
+
   return (
     <>
       <a id="search"></a>
-      <div className="w-full h-[30vh]">
+      <div className="w-full min-h-[40vh] h-[25vh]">
         <BackgroundGradient
           className="bg-background rounded-[20px] p-10 w-full h-full flex lg:flex-row flex-col items-center justify-around"
           containerClassName="h-full"
         >
-          <div className="grid grid-flow-row text-center lg:text-left gap-5">
+          <div className="grid grid-flow-row text-center lg:text-left gap-5 p-4">
             <Label className="text-4xl">Search Restaurants</Label>
             <p className="text-xl">
               Find the best restaurants in your area. Search by name or
               category.
             </p>
           </div>
-          <input
-            type="text"
-            placeholder="Search for restaurants"
-            className="w-96 h-12 px-4 mt-4 border border-gray-300 rounded-lg"
-          />
+          <div>
+            <input
+              type="text"
+              placeholder="Search for restaurants"
+              className="w-96 h-12 px-4 mt-4 border border-gray-300 rounded-lg"
+              onFocus={() => setIsOpen(true)}
+              onBlur={() => {
+                setTimeout(() => {
+                  setIsOpen(false);
+                }, 200);
+              }}
+            />
+            <div className={`size-96 pt-2 ${isOpen ? "absolute" : "hidden"}`}>
+              <ScrollArea className="w-full h-full bg-background shadow-2xl rounded-xl p-4 gap-y-2">
+                {restaurants.map((item, index) => {
+                  return (
+                    <>
+                      <Separator className={`${index === 0 ? "hidden" : ""}`} />
+                      <div
+                        className="my-3 text-center"
+                        onClick={() => handleCategoryClick(item.link)}
+                      >
+                        {item.name}
+                      </div>
+                    </>
+                  );
+                })}
+              </ScrollArea>
+            </div>
+          </div>
         </BackgroundGradient>
       </div>
     </>

@@ -34,11 +34,15 @@ export default function NavBar() {
         <a id="top-home"></a>
         <div className="w-full h-20 flex justify-center px-6">
           <div className="w-full max-w-7xl font-normal text-xl flex items-center justify-center">
-            <Label className="font-normal text-4xl">FoodieSpot</Label>
+            <Label className="font-normal text-4xl">
+              <Link href={"/"}>FoodieSpot</Link>
+            </Label>
             <ul className="flex-row gap-x-5 ml-8 w-full hidden md:flex">
               {navItems.map((item, index) => (
                 <>
-                  <Link href={item.link}>{item.name}</Link>
+                  <li key={item.id}>
+                    <Link href={item.link}>{item.name}</Link>
+                  </li>
                 </>
               ))}
             </ul>
