@@ -148,3 +148,36 @@ export const restaurants = [
     image: "/restaurant-12.jpg",
   },
 ];
+
+export const category = [
+  {
+    id: 1,
+    name: "Fast Food",
+    link: "/#fast-food",
+  },
+  {
+    id: 2,
+    name: "Desserts",
+    link: "/#desserts",
+  },
+  {
+    id: 3,
+    name: "Beverages",
+    link: "/#beverages",
+  },
+  {
+    id: 4,
+    name: "North Indian",
+    link: "/#north-indian",
+  },
+  {
+    id: 5,
+    name: "South Indian",
+    link: "/#south-indian",
+  },
+  {
+    id: 6,
+    name: "Chinese",
+    link: "/#chinese",
+  },
+];

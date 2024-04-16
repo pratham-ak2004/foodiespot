@@ -164,7 +164,7 @@ function Drawer() {
       </div>
 
       <div
-        className={`fixed backdrop-blur-3xl h-screen w-[300px] z-50 right-0 transform transition-transform ease-in-out duration-500 ${
+        className={`fixed bg-background border-l-2 h-screen w-[300px] z-50 right-0 transform transition-transform ease-in-out duration-500 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -175,10 +175,13 @@ function Drawer() {
           }}
         />
         <ul className="flex flex-col gap-y-8 mt-24 text-center">
-          <li>Home</li>
-          <li>Category</li>
-          <li>Search</li>
-          <li>About us</li>
+          {navItems.map((item, index) => (
+            <>
+              <li key={index} onClick={() => setIsOpen(false)}>
+                <Link href={item.link}>{item.name}</Link>
+              </li>
+            </>
+          ))}
         </ul>
         <div className="w-full mt-8 flex justify-center">
           <SwitchTheme />

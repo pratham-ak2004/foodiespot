@@ -3,7 +3,7 @@ import "@/app/styles.module.css";
 import Image from "next/image";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
-import { restaurants } from "@/lib/data";
+import { Restaurant, restaurants } from "@/lib/data";
 import { useRouter } from "next/navigation";
 
 import ScrollToTop from "@/components/custom-components/scrollToTop";
@@ -19,7 +19,10 @@ export default function Home() {
   return (
     <>
       <SessionProvider>
-        <main className="flex min-h-screen flex-col items-center justify-between pt-0">
+        <main
+          id="page-main"
+          className="flex min-h-screen flex-col items-center justify-between pt-0"
+        >
           <ScrollToTop />
           <HeroSection />
           <SearchRestaurant />
@@ -40,7 +43,7 @@ function HeroSection() {
         </div>
         <Image
           src="/food-home-svg.svg"
-          className="md:size-[40rem] size-64"
+          className="md:size-[40rem] size-72"
           width={500}
           height={500}
           alt={""}
@@ -52,20 +55,29 @@ function HeroSection() {
 
 function SearchRestaurant() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [restaurantsOptions, setRestaurantOptions] =
+    React.useState(restaurants);
   const router = useRouter();
-
-  React.useEffect(() => {
-    console.log(isOpen);
-  }, [isOpen]);
 
   const handleCategoryClick = (link: string) => {
     router.push(link);
   };
 
+  const handleInputChange = (e: any) => {
+    e.preventDefault();
+    let searchText = e.target.value?.toLowerCase().trim();
+
+    let filtered = restaurants.filter((item) =>
+      item.name.toLowerCase().trim().includes(searchText)
+    );
+
+    setRestaurantOptions(filtered);
+  };
+
   return (
     <>
       <a id="search"></a>
-      <div className="w-full min-h-[40vh] h-[25vh]">
+      <div className="w-full min-h-[40vh] h-fit">
         <BackgroundGradient
           className="bg-background rounded-[20px] p-10 w-full h-full flex lg:flex-row flex-col items-center justify-around"
           containerClassName="h-full"
@@ -77,21 +89,22 @@ function SearchRestaurant() {
               category.
             </p>
           </div>
-          <div>
+          <div className="">
             <input
               type="text"
               placeholder="Search for restaurants"
-              className="w-96 h-12 px-4 mt-4 border border-gray-300 rounded-lg"
+              className="w-96 h-12 px-4 mt-4 bg-background border border-gray-300 rounded-lg"
               onFocus={() => setIsOpen(true)}
               onBlur={() => {
                 setTimeout(() => {
                   setIsOpen(false);
                 }, 200);
               }}
+              onChange={handleInputChange}
             />
-            <div className={`size-96 pt-2 ${isOpen ? "absolute" : "hidden"}`}>
-              <ScrollArea className="w-full h-full bg-background shadow-2xl rounded-xl p-4 gap-y-2">
-                {restaurants.map((item, index) => {
+            <div className={`size-96 pt-2  ${isOpen ? "absolute" : "hidden"}`}>
+              <ScrollArea className="w-full h-96 min-h-10 bg-background shadow-2xl rounded-xl p-4 gap-y-2">
+                {restaurantsOptions.map((item, index) => {
                   return (
                     <>
                       <Separator className={`${index === 0 ? "hidden" : ""}`} />
@@ -104,6 +117,11 @@ function SearchRestaurant() {
                     </>
                   );
                 })}
+                {restaurantsOptions.length === 0 && (
+                  <>
+                    <div className="my-3 text-center">No search results</div>
+                  </>
+                )}
               </ScrollArea>
             </div>
           </div>
@@ -112,21 +130,6 @@ function SearchRestaurant() {
     </>
   );
 }
-
-const categoryList = [
-  {
-    title: "Fast Food",
-    image: "/fast-food.svg",
-  },
-  {
-    title: "Desserts",
-    image: "/desserts.svg",
-  },
-  {
-    title: "Beverages",
-    image: "/beverages.svg",
-  },
-];
 
 function Categories() {
   return (

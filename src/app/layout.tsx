@@ -23,14 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <GoogleAnalytics gaId={process.env.NEXT_GOOGLE_ANALYTICS_ID || ""} />
-        <SpeedInsights />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <GoogleAnalytics gaId={process.env.NEXT_GOOGLE_ANALYTICS_ID || ""} />
+          <SpeedInsights />
           <NavBar />
           {children}
         </ThemeProvider>
