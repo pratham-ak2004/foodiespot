@@ -5,6 +5,7 @@ import React from "react";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,15 +26,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { FloatingNav } from "@/components/floating-navbar";
 import { navItems } from "@/lib/data";
+import { redirect } from "next/navigation";
 
 export default function NavBar() {
+  const router = useRouter();
+
   return (
     <>
       <SessionProvider>
         <FloatingNav navItems={navItems} />
         <a id="top-home"></a>
         <div className="w-full h-20 flex justify-center px-6">
-          <div className="w-full max-w-7xl font-normal text-xl flex items-center justify-center">
+          <div
+            className="w-full max-w-7xl font-normal text-xl flex items-center justify-center"
+            id="navBar"
+          >
             <Label className="font-normal text-4xl">
               <Link href={"/"}>FoodieSpot</Link>
             </Label>
@@ -50,9 +57,11 @@ export default function NavBar() {
               className="gap-x-4 md:flex flex-row items-center hidden
             "
             >
-              <Button variant="outline" size="icon" className="border-0">
-                <Github />
-              </Button>
+              <a href={process.env.NEXT_GITHUB || ""}>
+                <Button variant="outline" size="icon" className="border-0">
+                  <Github />
+                </Button>
+              </a>
               <SwitchTheme />
               <UserAvatar />
             </div>
@@ -66,10 +75,6 @@ export default function NavBar() {
 
 function UserAvatar() {
   const { data } = useSession();
-
-  React.useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   if (data === null) {
     return (
@@ -142,10 +147,17 @@ function Drawer() {
   }, [theme]);
 
   React.useEffect(() => {
+    const ele1 = document.getElementById("main");
+    const ele2 = document.getElementById("navBar");
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      ele1?.classList.add("blur-md", "opacity-50");
+      ele2?.classList.add("blur-md", "opacity-50");
     } else {
       document.body.style.overflow = "auto";
+      ele1?.classList.remove("blur-md", "opacity-50");
+      ele2?.classList.remove("blur-md", "opacity-50");
     }
 
     return () => {

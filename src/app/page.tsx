@@ -14,13 +14,14 @@ import { BackgroundGradient } from "@/components/background-gradient";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
     <>
       <SessionProvider>
         <main
-          id="page-main"
+          id="main"
           className="flex min-h-screen flex-col items-center justify-between pt-0"
         >
           <ScrollToTop />
@@ -38,12 +39,14 @@ function HeroSection() {
     <>
       <HeroHighlight className="w-screen flex flex-col-reverse items-center lg:flex-row justify-center">
         <div className="p-6 mx-4">
-          <Label className="text-5xl w-96">Welcome to FoodieSpot 🍔</Label>
+          <Label className="md:text-5xl text-4xl w-96">
+            Welcome to FoodieSpot 🍔
+          </Label>
           <TextGenerateEffect words="The place to know about restaurants in nitte" />
         </div>
         <Image
           src="/food-home-svg.svg"
-          className="md:size-[40rem] size-72"
+          className="lg:size-[40rem] md:size-[35rem] size-[80%]"
           width={500}
           height={500}
           alt={""}
@@ -71,7 +74,11 @@ function SearchRestaurant() {
       item.name.toLowerCase().trim().includes(searchText)
     );
 
-    setRestaurantOptions(filtered);
+    let catFilter = restaurants.filter((item) =>
+      item.category.toLowerCase().trim().includes(searchText)
+    );
+
+    setRestaurantOptions(filtered.concat(catFilter));
   };
 
   return (
@@ -90,10 +97,9 @@ function SearchRestaurant() {
             </p>
           </div>
           <div className="">
-            <input
-              type="text"
+            <Input
               placeholder="Search for restaurants"
-              className="w-96 h-12 px-4 mt-4 bg-background border border-gray-300 rounded-lg"
+              className="max-w-96 w-[90vw] md:w-96 h-12 px-4 mt-4 bg-background border border-foreground rounded-lg"
               onFocus={() => setIsOpen(true)}
               onBlur={() => {
                 setTimeout(() => {
@@ -102,8 +108,12 @@ function SearchRestaurant() {
               }}
               onChange={handleInputChange}
             />
-            <div className={`size-96 pt-2  ${isOpen ? "absolute" : "hidden"}`}>
-              <ScrollArea className="w-full h-96 min-h-10 bg-background shadow-2xl rounded-xl p-4 gap-y-2">
+            <div
+              className={`max-w-96 w-[90vw] md:w-96 h-96 pt-2  ${
+                isOpen ? "absolute" : "hidden"
+              }`}
+            >
+              <ScrollArea className="w-full border-[3px] h-96 min-h-10 bg-background shadow-2xl rounded-xl p-4 gap-y-2">
                 {restaurantsOptions.map((item, index) => {
                   return (
                     <>
