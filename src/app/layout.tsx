@@ -6,6 +6,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 import NavBar from "@/components/custom-components/navBar";
+import Footer from "@/components/custom-components/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +35,8 @@ export default function RootLayout({
           <SpeedInsights />
           <NavBar />
           {children}
+          <Footer />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
