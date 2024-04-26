@@ -2,20 +2,17 @@ import { Html } from "@react-email/html";
 import { Text } from "@react-email/text";
 import { Section } from "@react-email/section";
 import { Container } from "@react-email/container";
+import "./styles.module.css";
 
 export default function EmailTemplate(sender: string, body: string) {
   return (
     <Html>
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-      </style>
       <Section style={main}>
         <Container style={container}>
-          <Text style={heading}>
+          <Text style={heading} className="roboto-bold">
             Feedback from {sender ? sender : "No Email"}
           </Text>
-          <Text style={paragraph}>
+          <Text style={paragraph} className="roboto-regular">
             {body ? body : "Sender didn't send any message"}
           </Text>
         </Container>
