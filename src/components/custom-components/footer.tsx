@@ -33,6 +33,8 @@ const formSchema = z.object({
 });
 
 export default function Footer() {
+  const [sending, setSending] = React.useState(false);
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,13 +44,43 @@ export default function Footer() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Successfull",
-      description: "Feedback sent successfully",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setSending(true);
+
+    await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "appication/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then(async (response) => {
+        console.log(await response.json());
+        if (response.status === 200) {
+          toast({
+            variant: "default",
+            title: "Successfull",
+            description: "Feedback sent successfully",
+          });
+          form.reset();
+        } else {
+          toast({
+            variant: "destructive",
+            title: "UnSuccessfull",
+            description: "Feedback not sent",
+          });
+        }
+        setSending(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          variant: "destructive",
+          title: "UnSuccessfull",
+          description: "Feedback not sent",
+        });
+        setSending(false);
+      });
   }
 
   return (
@@ -83,15 +115,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="basis-1/3 font-semibold">
+          <div className="basis-1/3 font-semibold md:p-0 px-6">
             <span className="hidden md:block">Feedback</span>
-            {/* <div className="flex flex-col gap-2">
-              <Input placeholder="Email" />
-              <Textarea placeholder="Message" className="resize-none" />
-              <span>
-                <Button className="right-0">Send</Button>
-              </span>
-            </div> */}
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -105,7 +130,9 @@ export default function Footer() {
                       <FormControl>
                         <Input placeholder="Email" {...field} />
                       </FormControl>
-                      <Button type="submit">Submit</Button>
+                      <Button type="submit" disabled={sending}>
+                        {sending ? "Sending" : "submit"}
+                      </Button>
                       <FormMessage />
                     </FormItem>
                   )}
