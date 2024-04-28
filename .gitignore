@@ -39,3 +39,7 @@ certificates
 
 # .env
 .env
+
+# .vscode
+.vscode
+.idea

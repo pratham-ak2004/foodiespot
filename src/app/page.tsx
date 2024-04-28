@@ -1,9 +1,8 @@
 "use client";
-import "@/app/styles.module.css";
 import Image from "next/image";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
-import { Restaurant, restaurants } from "@/lib/data";
+import { Restaurant, category, restaurants } from "@/lib/data";
 import { useRouter } from "next/navigation";
 
 import ScrollToTop from "@/components/custom-components/scrollToTop";
@@ -15,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
+import { DirectionAwareHover } from "@/components/direction-aware-hover";
 
 export default function Home() {
   return (
@@ -62,8 +62,11 @@ function SearchRestaurant() {
     React.useState(restaurants);
   const router = useRouter();
 
-  const handleCategoryClick = (link: string) => {
-    router.push(link);
+  const handleCategoryClick = (item: Restaurant) => {
+    // router.push(link);
+    router.push(`${item.category}/${item.link}`)
+    console.log(item);
+    
   };
 
   const handleInputChange = (e: any) => {
@@ -84,7 +87,7 @@ function SearchRestaurant() {
   return (
     <>
       <a id="search"></a>
-      <div className="w-full min-h-[40vh] h-fit">
+      <div className="w-full min-h-[40vh] h-full">
         <BackgroundGradient
           className="bg-background rounded-[20px] p-10 w-full h-full flex lg:flex-row flex-col items-center justify-around"
           containerClassName="h-full"
@@ -120,7 +123,7 @@ function SearchRestaurant() {
                       <Separator className={`${index === 0 ? "hidden" : ""}`} />
                       <div
                         className="my-3 text-center"
-                        onClick={() => handleCategoryClick(item.link)}
+                        onClick={() => handleCategoryClick(item)}
                       >
                         {item.name}
                       </div>
@@ -142,15 +145,29 @@ function SearchRestaurant() {
 }
 
 function Categories() {
+  const router = useRouter();
   return (
     <>
       <a id="category"></a>
-      <div className="flex flex-col items-center justify-center h-screen">
-        <Label className="text-4xl">Categories</Label>
-        <div className="flex flex-row items-center justify-center">
-          {/* <CategoryCard title="Fast Food" />
-        <CategoryCard title="Desserts" />
-        <CategoryCard title="Beverages" /> */}
+      <div className="h-[75vh] flex flex-col items-center">
+        <Label className="text-4xl text-center">Categories</Label>
+        <p className="mt-10">
+          Browsse through different Categories of to know about Food spots
+        </p>
+        <div className="flex flex-row items-center justify-center py-8 gap-8">
+          {category.map((item, index) => {
+            return (
+              <>
+                <div onClick={() => {
+                  router.push(item.link)
+                }}>
+                  <DirectionAwareHover imageUrl={item.image}>
+                    {item.name}
+                  </DirectionAwareHover>
+                </div>
+              </>
+            );
+          })}
         </div>
       </div>
     </>

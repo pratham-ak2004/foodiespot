@@ -1,9 +1,0 @@
-{
-    "files.autoSave": "onWindowChange",
-    "editor.fontSize": 14,
-    "editor.wordWrap": "on",
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": false,
-    "gitlens.detectNestedRepositories": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true
-}
