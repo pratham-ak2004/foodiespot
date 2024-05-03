@@ -20,11 +20,11 @@ export default function Category() {
 
   return (
     <>
-      <main className="w-full min-h-[80vh] flex flex-col items-center">
+      <main id="main" className="w-full min-h-[80vh] flex flex-col items-center bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">
         <h1 className="text-4xl font-bold my-4">
           {param.category.toString().toUpperCase()}
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-8 mb-20">
           {restaurantList.map((restaurant,idx) => (
             <div key={idx} onClick={() => {
                 router.push(`/${restaurant.category}/${restaurant.link}`);

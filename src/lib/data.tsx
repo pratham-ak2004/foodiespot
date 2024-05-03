@@ -166,3 +166,10 @@ export const category = [
       "https://talktobirbal.com/wp-content/uploads/2017/10/Restaurant-BG_001.jpg",
   },
 ];
+
+export type Card = {
+  id: number;
+  content: JSX.Element | React.ReactNode | string;
+  className: string;
+  thumbnail: string;
+};

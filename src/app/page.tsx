@@ -149,12 +149,12 @@ function Categories() {
   return (
     <>
       <a id="category"></a>
-      <div className="h-[75vh] flex flex-col items-center">
+      <div className="min-h-[75vh] py-10 px-6 text-center flex flex-col items-center">
         <Label className="text-4xl text-center">Categories</Label>
         <p className="mt-10">
           Browsse through different Categories of to know about Food spots
         </p>
-        <div className="flex flex-row items-center justify-center py-8 gap-8">
+        <div className="flex lg:flex-row flex-col items-center justify-center py-8 gap-8">
           {category.map((item, index) => {
             return (
               <>
